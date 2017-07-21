@@ -6,6 +6,7 @@
 package uffmdesafio;
 
 import core.Aluno;
+import core.EmailGenerator;
 import java.util.ArrayList;
 import java.util.Scanner;
 import utils.CsvRW;
@@ -23,7 +24,7 @@ public class UFFMDesafio {
         int matricula;
         Aluno aluno = new Aluno();
         ArrayList<Aluno> alunos = new ArrayList();
-
+        ArrayList<String> emailOptions = new ArrayList();
         alunos = CsvRW.csvR("alunos.csv");
         int size = alunos.size();
 
@@ -36,10 +37,18 @@ public class UFFMDesafio {
 
         if (aluno.getUffmail().equals("") && aluno.getStatus().equalsIgnoreCase("ativo")) {
             String[] nome = aluno.getNome().split(" ");
-            System.out.println("Olá " + nome[0] + ", " + "por favor escolha uma das opções abaixo para o seu UFFMail:");
             
-        }else{
-            System.out.println("Não foi possível criar conta pois o usuário já possui um UFFMail.");
+            System.out.println("");
+            System.out.println("Olá " + nome[0] + ", " + "por favor escolha uma das opções abaixo para o seu UFFMail:");
+            System.out.println("");
+            
+            emailOptions = EmailGenerator.generator(aluno.getNome());
+            for (int i = 1; i <= emailOptions.size(); i++) {
+                System.out.println(i + "." + emailOptions.get(i - 1));
+            }
+
+        } else {
+            System.out.println("Não foi possível criar conta pois o usuário já possui um UFFMail, ou está inativo.");
         }
     }
 
