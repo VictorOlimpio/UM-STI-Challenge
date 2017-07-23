@@ -25,11 +25,9 @@ public class CsvRW {
     private static ArrayList<Aluno> listaAlunos = new ArrayList();
 
     /**
-     * 
-     * @param caminho
-     *              nome ou caminho do arquivo
-     * @return 
-     *              retorna a lista contendo todos os alunos dentro do arquivo
+     *
+     * @param caminho nome ou caminho do arquivo
+     * @return retorna a lista contendo todos os alunos dentro do arquivo
      */
     public static ArrayList<Aluno> csvR(String caminho) {
         try {
@@ -39,9 +37,9 @@ public class CsvRW {
             alunos.readHeaders();
             //enquanto ainda é possivel ler do arquivo executa as linhas abaixo
             while (alunos.readRecord()) {
-                
+
                 Aluno aluno = new Aluno();
-                
+
                 aluno.setNome(alunos.get("nome"));
                 aluno.setMatricula(Integer.parseInt(alunos.get("matricula")));
                 aluno.setTelefone(alunos.get("telefone"));
@@ -56,18 +54,18 @@ public class CsvRW {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
         return listaAlunos;
     }
-    
+
     /**
-     * 
-     * @param caminho
-     *              nome ou caminho do arquivo
-     * @param alunos 
-     *              lista de alunos a ser escrita no arquivo.
+     *
+     * @param caminho nome ou caminho do arquivo
+     * @param alunos lista de alunos a ser escrita no arquivo.
      */
     public static void csvW(String caminho, ArrayList<Aluno> alunos) {
 
@@ -108,17 +106,20 @@ public class CsvRW {
     }
 
     /**
-    *@param matricula 
-    *               matricula do aluno a ser buscado.
-    * @param alunos
-    *               lista de alunos a ser consultada.
-    *@return  
-    *               retorna aluno da lista de alunos com a matrícula informada.
-    **/
+     * @param matricula matricula do aluno a ser buscado.
+     * @param alunos lista de alunos a ser consultada.
+     * @return retorna aluno da lista de alunos com a matrícula informada.
+     *
+     */
     public static Aluno consulta(int matricula, ArrayList<Aluno> alunos) {
-        int size = alunos.size();
+        
+        if (alunos == null){
+            return null;
+        }
+        
+        int tamanho = alunos.size();
         Aluno aluno;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < tamanho; i++) {
             aluno = alunos.get(i);
             if (matricula == aluno.getMatricula()) {
                 return aluno;
@@ -128,21 +129,21 @@ public class CsvRW {
     }
 
     /**
-     * 
-     * @param matricula
-     *              matricula do aluno a ser atualizado.
-     * @param alunos
-     *              lista de alunos a ser atualizada
-     * @param uffm 
-     *              novo uffmail a ser adicionado ao aluno dentro da lista
-     * @return 
-     *              retorna lista de alunos atualizada com o aluno com o novo uffmail
+     *
+     * @param matricula matricula do aluno a ser atualizado.
+     * @param alunos lista de alunos a ser atualizada
+     * @param uffm novo uffmail a ser adicionado ao aluno dentro da lista
+     * @return retorna lista de alunos atualizada com o aluno com o novo uffmail
      */
     public static void atualizaAluno(int matricula, ArrayList<Aluno> alunos, String uffm) {
-        int size = alunos.size();
-        for (int i = 0; i < size; i++) {
-            if (matricula == alunos.get(i).getMatricula()) {
-                alunos.get(i).setUffmail(uffm);
+
+        if (alunos != null) {
+            int tamanho = alunos.size();
+
+            for (int i = 0; i < tamanho; i++) {
+                if (matricula == alunos.get(i).getMatricula()) {
+                    alunos.get(i).setUffmail(uffm);
+                }
             }
         }
     }

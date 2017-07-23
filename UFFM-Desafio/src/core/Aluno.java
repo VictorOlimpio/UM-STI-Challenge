@@ -19,7 +19,6 @@ public class Aluno {
     private String status;
     
     public Aluno(){
-        
     }
     
     public Aluno(String nome, int matricula, String telefone, String email, String uffmail, String status){
@@ -81,6 +80,6 @@ public class Aluno {
     
     @Override
     public String toString(){
-        return nome + "," + matricula + "," + telefone + "," + email + "," + uffmail + "," + status;
+        return nome + "," + Integer.toString(matricula) + "," + telefone + "," + email + "," + uffmail + "," + status;
     }
 }

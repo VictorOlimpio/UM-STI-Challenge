@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uffmdesafio;
+package core;
 
 import core.Aluno;
 import core.GeradorDeEmail;
@@ -15,13 +15,10 @@ import utils.CsvRW;
  *
  * @author victor
  */
-public class UFFMDesafio {
+public class AdministradorUFFMail {
     public static String ATIVO = "ativo";
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    public static void gerenciar() {
 
         Aluno aluno = new Aluno();
         ArrayList<Aluno> alunos = new ArrayList();

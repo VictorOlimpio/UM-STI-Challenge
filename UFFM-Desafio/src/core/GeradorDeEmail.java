@@ -37,27 +37,31 @@ public class GeradorDeEmail {
 
         Random randNum = new Random();
         
-        int size = substrings.length;
+        int tamanho = substrings.length;
         int rand;
-
+        
+        if (alunos == null){
+            return null;
+        }
+        
         for (int i = 0; i < 6; i++) {
             //escolha pseudo aleatoria para indice dentro do número de elementos do vetor substrings
-            rand = randNum.nextInt(size - 1);
+            rand = randNum.nextInt(tamanho - 1);
             conta = "";
             
-            if (size >= 2) {
+            if (tamanho >= 2) {
                 switch (i) {
                     case 0:
                         conta += substrings[rand] + "_" + substrings[rand + 1];
                         break;
                     case 1:
-                        conta += substrings[0] + substrings[size - 2].charAt(0) + substrings[size - 1].charAt(0);
+                        conta += substrings[0] + substrings[tamanho - 2].charAt(0) + substrings[tamanho - 1].charAt(0);
                         break;
                     case 2:
-                        conta += substrings[rand] + substrings[size - 1].charAt(0);
+                        conta += substrings[rand] + substrings[tamanho - 1].charAt(0);
                         break;
                     case 3:
-                        conta += substrings[rand].charAt(0) + substrings[size - 1];
+                        conta += substrings[rand].charAt(0) + substrings[tamanho - 1];
                         break;
                     case 4:
                         conta += substrings[rand] + substrings[rand + 1];
@@ -90,6 +94,9 @@ public class GeradorDeEmail {
      */
     public static boolean checagemDeEmailGerado(String conta, ArrayList<Aluno> alunos) {
         boolean notEqual = true;
+        if(alunos == null){
+            return false;
+        }
         for (int i = 0; i < alunos.size(); i++) {
             if (alunos.get(i).getUffmail().equalsIgnoreCase(conta)) {
                 return notEqual = false;
