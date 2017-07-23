@@ -13,26 +13,38 @@ import sun.misc.VM;
  *
  * @author victor
  */
-public class EmailGenerator {
+public class GeradorDeEmail {
 
-    public static ArrayList<String> generator(String nome) {
+    /**
+     * 
+     * @param nome
+     *              Nome do aluno.
+     * @param alunos
+     *              Lista de alunos.
+     * @return 
+     *              Retorna uma lista de opções válidas de uffmail.
+     */
+    public static ArrayList<String> gerador(String nome, ArrayList<Aluno> alunos) {
         String dominio = "@id.uff.br";
         String conta = "";
         ArrayList<String> contas = new ArrayList();
 
         nome = nome.toLowerCase();
+        // retira preposições e caracteres especiais, comuns em alguns nomes.
         nome = nome.replace(" da ", " ").replace(" do ", " ").replace(" dos ", " ").replace(" de ", " ").replace("'", "");
 
         String[] substrings = nome.split(" ");
 
         Random randNum = new Random();
+        
         int size = substrings.length;
         int rand;
 
         for (int i = 0; i < 6; i++) {
-
+            //escolha pseudo aleatoria para indice dentro do número de elementos do vetor substrings
             rand = randNum.nextInt(size - 1);
             conta = "";
+            
             if (size >= 2) {
                 switch (i) {
                     case 0:
@@ -54,14 +66,36 @@ public class EmailGenerator {
                         conta += substrings[rand + 1] + substrings[rand];
                         break;
                 }
-                conta += dominio;
+                
             } else {
-                conta += substrings[rand];
+                conta += substrings[0];
             }
-            contas.add(conta);
+            conta += dominio;
+            if (checagemDeEmailGerado(conta, alunos)) {
+                contas.add(conta);
+            }
         }
 
         return contas;
+    }
+
+    /**
+     * 
+     * @param conta
+     *             Conta a ser comparada 
+     * @param alunos
+     *             Lista de alunos
+     * @return 
+     *             Retorna verdadeiro se o email não é igual a nenhuma outra conta de uffmail já existente, falso caso contrário.
+     */
+    public static boolean checagemDeEmailGerado(String conta, ArrayList<Aluno> alunos) {
+        boolean notEqual = true;
+        for (int i = 0; i < alunos.size(); i++) {
+            if (alunos.get(i).getUffmail().equalsIgnoreCase(conta)) {
+                return notEqual = false;
+            }
+        }
+        return true;
     }
 
 }

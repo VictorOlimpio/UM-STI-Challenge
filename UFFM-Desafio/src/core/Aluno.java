@@ -81,7 +81,6 @@ public class Aluno {
     
     @Override
     public String toString(){
-        return nome + ", " + matricula + ", " + telefone + ", " + email + ", " + uffmail + ", " + status;
-        
+        return nome + "," + matricula + "," + telefone + "," + email + "," + uffmail + "," + status;
     }
 }

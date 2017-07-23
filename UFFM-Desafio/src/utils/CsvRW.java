@@ -22,27 +22,36 @@ import java.util.ArrayList;
 public class CsvRW {
 
     //Lista contendo cada instância de aluno dentro do arquivo
-    private static ArrayList<Aluno> alunosList = new ArrayList();
+    private static ArrayList<Aluno> listaAlunos = new ArrayList();
 
-    public static ArrayList<Aluno> csvR(String path) {
+    /**
+     * 
+     * @param caminho
+     *              nome ou caminho do arquivo
+     * @return 
+     *              retorna a lista contendo todos os alunos dentro do arquivo
+     */
+    public static ArrayList<Aluno> csvR(String caminho) {
         try {
-            //Abrindo arquivo csv usando a biblioteca Csv Reader
-            CsvReader alunos = new CsvReader(path);
-
+            //Abrindo arquivo csv
+            CsvReader alunos = new CsvReader(caminho);
+            //Lê o cabeçalho
             alunos.readHeaders();
-
+            //enquanto ainda é possivel ler do arquivo executa as linhas abaixo
             while (alunos.readRecord()) {
+                
                 Aluno aluno = new Aluno();
+                
                 aluno.setNome(alunos.get("nome"));
                 aluno.setMatricula(Integer.parseInt(alunos.get("matricula")));
                 aluno.setTelefone(alunos.get("telefone"));
                 aluno.setEmail(alunos.get("email"));
                 aluno.setUffmail(alunos.get("uffmail"));
                 aluno.setStatus(alunos.get("status"));
-                
-                alunosList.add(aluno);
+
+                listaAlunos.add(aluno);
             }
-            
+
             alunos.close();
 
         } catch (FileNotFoundException e) {
@@ -50,57 +59,91 @@ public class CsvRW {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return alunosList;
+        return listaAlunos;
     }
+    
+    /**
+     * 
+     * @param caminho
+     *              nome ou caminho do arquivo
+     * @param alunos 
+     *              lista de alunos a ser escrita no arquivo.
+     */
+    public static void csvW(String caminho, ArrayList<Aluno> alunos) {
 
-    public static void csvW(String path) {
-
-        // before we open the file check to see if it already exists
-        boolean alreadyExists = new File(path).exists();
+        // antes de abrir o arquivo, checa se ele já existe.
+        boolean alreadyExists = new File(caminho).exists();
 
         try {
-            // use FileWriter constructor that specifies open for appending
-            CsvWriter csvOutput = new CsvWriter(new FileWriter(path, true), ',');
+            // usa o construtor do FileWriter que especifica que está aberto para escrita.
+            CsvWriter csvOutput = new CsvWriter(new FileWriter(caminho, true), ',');
 
-            // if the file didn't already exist then we need to write out the header line
+            // se o arquivo não existe, escreve a linha do cabeçalho.
             if (!alreadyExists) {
-                csvOutput.write("id");
-                csvOutput.write("name");
+                csvOutput.write("nome");
+                csvOutput.write("matricula");
+                csvOutput.write("telefone");
+                csvOutput.write("email");
+                csvOutput.write("uffmail");
+                csvOutput.write("status");
                 csvOutput.endRecord();
             }
-            // else assume that the file already has the correct header line
-
-            // write out a few records
-            csvOutput.write("1");
-            csvOutput.write("Bruce");
-            csvOutput.endRecord();
-
-            csvOutput.write("2");
-            csvOutput.write("John");
-            csvOutput.endRecord();
-
+            // caso contrário assume que o arquivo existe.
+            Aluno aluno;
+            // escreve todos os elementos da lista no arquivo.
+            for (int i = 0; i < alunos.size(); i++) {
+                aluno = alunos.get(i);
+                csvOutput.write(aluno.getNome());
+                csvOutput.write(Integer.toString(aluno.getMatricula()));
+                csvOutput.write(aluno.getTelefone());
+                csvOutput.write(aluno.getEmail());
+                csvOutput.write(aluno.getUffmail());
+                csvOutput.write(aluno.getStatus());
+                csvOutput.endRecord();
+            }
             csvOutput.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void print() {
-        System.out.println(alunosList.size());
-        for (int i = 0; i < alunosList.size(); i++) {
-            System.out.println(alunosList.get(i).toString());
-        }
-    }
-    
-    public static Aluno query(int matricula){
-        int size = alunosList.size();
+    /**
+    *@param matricula 
+    *               matricula do aluno a ser buscado.
+    * @param alunos
+    *               lista de alunos a ser consultada.
+    *@return  
+    *               retorna aluno da lista de alunos com a matrícula informada.
+    **/
+    public static Aluno consulta(int matricula, ArrayList<Aluno> alunos) {
+        int size = alunos.size();
         Aluno aluno;
         for (int i = 0; i < size; i++) {
-            aluno = alunosList.get(i);
-            if(matricula == aluno.getMatricula()){
+            aluno = alunos.get(i);
+            if (matricula == aluno.getMatricula()) {
                 return aluno;
             }
         }
         return null;
+    }
+
+    /**
+     * 
+     * @param matricula
+     *              matricula do aluno a ser atualizado.
+     * @param alunos
+     *              lista de alunos a ser atualizada
+     * @param uffm 
+     *              novo uffmail a ser adicionado ao aluno dentro da lista
+     * @return 
+     *              retorna lista de alunos atualizada com o aluno com o novo uffmail
+     */
+    public static void atualizaAluno(int matricula, ArrayList<Aluno> alunos, String uffm) {
+        int size = alunos.size();
+        for (int i = 0; i < size; i++) {
+            if (matricula == alunos.get(i).getMatricula()) {
+                alunos.get(i).setUffmail(uffm);
+            }
+        }
     }
 }
